@@ -69,6 +69,12 @@ app.post('/api/download', async (req, res) => {
         maxRedirects: 5,
         validateStatus: function (status) {
           return status >= 200 && status < 400;
+        },
+        beforeRedirect: (options) => {
+          // Validate that redirect target is still a TeraBox domain
+          if (!isValidTeraBoxURL(options.href)) {
+            throw new Error('Redirect to non-TeraBox domain not allowed');
+          }
         }
       });
     } catch (error) {
@@ -104,6 +110,12 @@ app.post('/api/download', async (req, res) => {
         responseType: 'stream',
         timeout: 30000, // 30 second timeout for download
         maxRedirects: 5,
+        beforeRedirect: (options) => {
+          // Validate that redirect target is still a TeraBox domain
+          if (!isValidTeraBoxURL(options.href)) {
+            throw new Error('Redirect to non-TeraBox domain not allowed');
+          }
+        }
       });
     } catch (error) {
       console.error('Download error:', error.message);
