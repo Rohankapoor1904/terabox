@@ -1,0 +1,28 @@
+{
+  "name": "terabox",
+  "version": "1.0.0",
+  "description": "RESTful API for downloading files from TeraBox URLs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rohankapoor1904/terabox.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Rohankapoor1904/terabox/issues"
+  },
+  "homepage": "https://github.com/Rohankapoor1904/terabox#readme",
+  "dependencies": {
+    "axios": "^1.13.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1"
+  }
+}
