@@ -1,6 +1,9 @@
 # TeraBox Download API
 
-A RESTful API that enables users to download **any media file** directly from TeraBox or 1024TeraBox URLs.
+A RESTful API that enables users to download **any file type** (images, videos, audio, documents, archives, etc.) directly from TeraBox or 1024TeraBox URLs.
+
+> **Can the API download any media file from TeraBox?**  
+> ✅ **YES!** The API is completely file-type agnostic and works with ALL file types - not just media files. See [FAQ.md](FAQ.md) for details.
 
 ## Features
 
