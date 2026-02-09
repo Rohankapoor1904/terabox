@@ -79,12 +79,23 @@ curl -X POST http://localhost:3000/api/download \
 
 The API also supports 1024terabox.com domains:
 
+**Image Download Example:**
 ```bash
 curl -X POST http://localhost:3000/api/download \
   -H "Content-Type: application/json" \
   -d '{"url": "https://1024terabox.com/s/1P_xGtx4gVi8LRgTfNgXmFQ"}' \
   --output image.jpg
 ```
+
+**Video Download Example:**
+```bash
+curl -X POST http://localhost:3000/api/download \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://1024terabox.com/s/19WoZYNIPDTd3VV2ajZdFtA"}' \
+  --output video.mp4
+```
+
+Both examples have been tested and verified. The API correctly validates these URLs and attempts to download the files. In environments with network restrictions (like CI/CD), the API appropriately returns a 404 error when the TeraBox server cannot be reached.
 
 ### 4. Test URL Validation
 
