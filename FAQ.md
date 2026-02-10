@@ -1,5 +1,23 @@
 # Frequently Asked Questions (FAQ)
 
+## ⚠️ Critical Information
+
+### Q: Why does my TeraBox share URL not work?
+
+**A:** The API only supports **direct file URLs**, NOT share URLs.
+
+**Share URLs (NOT supported):**
+- Format: `https://terabox.com/s/...` or `https://1024terabox.com/s/...`
+- These are web pages that require JavaScript
+- Will return error: "File not accessible"
+
+**Direct URLs (Supported):**
+- Format: Direct CDN/file server URLs
+- Point directly to file content
+- Can be downloaded with standard HTTP requests
+
+See [LIMITATIONS.md](LIMITATIONS.md) for detailed explanation and workarounds.
+
 ## General Questions
 
 ### Q: Can the API download any media file from TeraBox?
@@ -12,7 +30,7 @@
 - Archives (ZIP, RAR, 7Z, etc.)
 - And literally any other file type
 
-The API is completely **file-type agnostic** - it doesn't check or restrict file types. If TeraBox can host it, the API can download it.
+**However**, you must use **direct file URLs**, not share URLs. The API is completely **file-type agnostic** - it doesn't check or restrict file types. If TeraBox can host it and you have a direct URL, the API can download it.
 
 ### Q: How does the API handle different file types?
 
@@ -27,26 +45,26 @@ This means all file types are handled identically with the same code path.
 
 ### Q: Do I need to specify the file type when making a request?
 
-**A: NO.** You only need to provide the TeraBox URL. The API will:
+**A: NO.** You only need to provide the **direct file URL**. The API will:
 - Automatically detect the Content-Type
 - Extract the filename (with correct extension)
 - Stream the file with proper headers
 
-Example - works for ANY file type:
+Example - works for ANY file type (must be a direct URL):
 ```bash
 curl -X POST http://localhost:3000/api/download \
   -H "Content-Type: application/json" \
-  -d '{"url": "https://terabox.com/s/YOUR_FILE_ID"}' \
+  -d '{"url": "DIRECT_FILE_URL_HERE"}' \
   --output filename.ext
 ```
 
+⚠️ **Note**: Replace `DIRECT_FILE_URL_HERE` with an actual direct file URL, not a share URL (`/s/...`).
+
 ### Q: What file types have been tested?
 
-**A:** The API has been successfully tested with:
-- ✅ Image files (JPEG): `https://1024terabox.com/s/1P_xGtx4gVi8LRgTfNgXmFQ`
-- ✅ Video files (MP4): `https://1024terabox.com/s/19WoZYNIPDTd3VV2ajZdFtA`
+**A:** The API architecture is file-type agnostic and works with any file type when given direct URLs.
 
-Both showed **identical behavior**, confirming the file-type agnostic design.
+**Note about previous test URLs**: The URLs mentioned in testing (`https://1024terabox.com/s/...`) are actually share URLs, not direct file URLs. They were used to demonstrate URL validation and error handling, not successful downloads. In restricted network environments (like CI/CD), they correctly return "File not accessible" errors.
 
 ### Q: Can the API download large video files?
 
@@ -149,12 +167,20 @@ Content-Type: application/json
 
 ### Q: What URLs are accepted?
 
-**A:** TeraBox and 1024TeraBox URLs:
-- ✅ `https://terabox.com/s/...`
-- ✅ `https://www.terabox.com/s/...`
-- ✅ `https://1024terabox.com/s/...`
-- ✅ `https://www.1024terabox.com/s/...`
-- ✅ Any subdomain of terabox.com or 1024terabox.com
+**A:** The API validates TeraBox and 1024TeraBox domains but **requires direct file URLs**:
+
+**Domain validation (✅ Pass):**
+- `https://terabox.com/...`
+- `https://www.terabox.com/...`
+- `https://1024terabox.com/...`
+- `https://www.1024terabox.com/...`
+- Any subdomain of terabox.com or 1024terabox.com
+
+**URL type requirement:**
+- ✅ **Direct file URLs** - Point directly to file content
+- ❌ **Share URLs** (`/s/...`) - These are web pages, not file URLs
+
+See [LIMITATIONS.md](LIMITATIONS.md) for more details on URL types.
 
 ### Q: What about rate limiting?
 
@@ -180,6 +206,13 @@ Content-Type: application/json
 ### Q: I get "File not accessible" error
 
 **A:** This can happen when:
+- **You're using a share URL** (`/s/...`) instead of a direct file URL - See [LIMITATIONS.md](LIMITATIONS.md)
+- File doesn't exist on TeraBox
+- File is private/password-protected
+- Network cannot reach TeraBox servers
+- TeraBox servers are temporarily down
+
+**Most common cause**: Using a share URL instead of a direct file URL. Share URLs are web pages that require browser interaction to get the actual download link.
 - File doesn't exist on TeraBox
 - File is private/password-protected
 - Network cannot reach TeraBox servers

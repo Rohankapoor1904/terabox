@@ -5,6 +5,8 @@ A RESTful API that enables users to download **any file type** (images, videos, 
 > **Can the API download any media file from TeraBox?**  
 > ✅ **YES!** The API is completely file-type agnostic and works with ALL file types - not just media files. See [FAQ.md](FAQ.md) for details.
 
+> ⚠️ **IMPORTANT LIMITATION**: This API only works with **direct file URLs**. It does NOT support TeraBox share URLs (e.g., `https://terabox.com/s/...`). See [LIMITATIONS.md](LIMITATIONS.md) for detailed explanation and workarounds.
+
 ## Features
 
 - ✅ **Download ANY file type** - Images, Videos, Audio, Documents, Archives, etc.
@@ -16,6 +18,7 @@ A RESTful API that enables users to download **any file type** (images, videos, 
 - ✅ Comprehensive error handling
 - ✅ Rate limiting (20 requests per minute per IP)
 - ✅ No sensitive data exposure
+- ⚠️ **Works with direct file URLs only** - Share URLs are not supported
 
 ## Supported File Types
 
