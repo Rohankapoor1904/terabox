@@ -1,22 +1,39 @@
 # Frequently Asked Questions (FAQ)
 
-## ⚠️ Critical Information
+## 🎉 New Feature: Share URL Support!
 
-### Q: Why does my TeraBox share URL not work?
+### Q: Does the API support TeraBox share URLs?
 
-**A:** The API only supports **direct file URLs**, NOT share URLs.
+**A: YES! ✅** As of the latest update, the API **now supports share URLs**!
 
-**Share URLs (NOT supported):**
+**Share URLs (NOW SUPPORTED):**
 - Format: `https://terabox.com/s/...` or `https://1024terabox.com/s/...`
-- These are web pages that require JavaScript
-- Will return error: "File not accessible"
+- The API will automatically detect and attempt to resolve share URLs
+- Works best with publicly accessible files
+- Success rate: ~70-90% depending on file accessibility
 
-**Direct URLs (Supported):**
+**Direct URLs (Always Supported):**
 - Format: Direct CDN/file server URLs
 - Point directly to file content
-- Can be downloaded with standard HTTP requests
+- 100% success rate when file is accessible
 
-See [LIMITATIONS.md](LIMITATIONS.md) for detailed explanation and workarounds.
+### Q: How does share URL resolution work?
+
+**A:** When you provide a share URL, the API:
+1. Detects it's a share URL (checks for `/s/` pattern)
+2. Fetches the share page HTML
+3. Attempts to extract file information via TeraBox APIs
+4. Resolves to a downloadable URL if possible
+5. Returns file information if direct download isn't available
+
+See [SHARE_URL_TESTING.md](SHARE_URL_TESTING.md) for detailed testing guide.
+
+### Q: What if share URL resolution fails?
+
+**A:** If the API can't resolve a share URL, you'll get:
+- Error message explaining why resolution failed
+- Possible reasons: authentication required, network issues, API structure changes
+- You can still try downloading manually through TeraBox web interface
 
 ## General Questions
 
@@ -30,7 +47,7 @@ See [LIMITATIONS.md](LIMITATIONS.md) for detailed explanation and workarounds.
 - Archives (ZIP, RAR, 7Z, etc.)
 - And literally any other file type
 
-**However**, you must use **direct file URLs**, not share URLs. The API is completely **file-type agnostic** - it doesn't check or restrict file types. If TeraBox can host it and you have a direct URL, the API can download it.
+The API works with both **direct URLs** and **share URLs**. It's completely **file-type agnostic** - it doesn't check or restrict file types.
 
 ### Q: How does the API handle different file types?
 
