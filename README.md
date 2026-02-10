@@ -1,24 +1,24 @@
 # TeraBox Download API
 
-A RESTful API that enables users to download **any file type** (images, videos, audio, documents, archives, etc.) directly from TeraBox or 1024TeraBox URLs.
+A RESTful API that enables users to download **any file type** (images, videos, audio, documents, archives, etc.) from TeraBox or 1024TeraBox URLs, **including share URLs**.
 
 > **Can the API download any media file from TeraBox?**  
 > ✅ **YES!** The API is completely file-type agnostic and works with ALL file types - not just media files. See [FAQ.md](FAQ.md) for details.
 
-> ⚠️ **IMPORTANT LIMITATION**: This API only works with **direct file URLs**. It does NOT support TeraBox share URLs (e.g., `https://terabox.com/s/...`). See [LIMITATIONS.md](LIMITATIONS.md) for detailed explanation and workarounds.
+> 🎉 **NEW**: This API now supports **TeraBox share URLs** (e.g., `https://terabox.com/s/...`)! The API will attempt to resolve share URLs and extract download information automatically.
 
 ## Features
 
 - ✅ **Download ANY file type** - Images, Videos, Audio, Documents, Archives, etc.
 - ✅ **File-type agnostic** - No restrictions on content types
 - ✅ **Automatic Content-Type detection** - Works with all MIME types
+- ✅ **Share URL support** - Works with both direct URLs and share URLs
 - ✅ URL validation for terabox.com and 1024terabox.com domains
 - ✅ File accessibility checking
 - ✅ Streaming file downloads with proper headers
 - ✅ Comprehensive error handling
 - ✅ Rate limiting (20 requests per minute per IP)
 - ✅ No sensitive data exposure
-- ⚠️ **Works with direct file URLs only** - Share URLs are not supported
 
 ## Supported File Types
 
