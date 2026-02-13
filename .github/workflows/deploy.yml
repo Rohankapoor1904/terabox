@@ -28,10 +28,10 @@ jobs:
 
       - name: Replace API Base URL
         env:
-          API_URL: ${{ secrets.API_BASE_URL }}
+          API_URL: ${{ secrets.API_BASE }}
         run: |
           if [ -z "$API_URL" ]; then
-            echo "API_BASE_URL secret not found!"
+            echo "API_BASE secret not found!"
             exit 1
           fi
           echo "Replacing __API_BASE__ with API URL..."
