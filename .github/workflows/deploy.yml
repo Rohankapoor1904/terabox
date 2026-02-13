@@ -28,7 +28,8 @@ jobs:
 
       - name: Replace API Base URL
         run: |
-          find . -name "*.html" -type f -exec sed -i "s/__API_BASE__/${{ secrets.API_BASE_URL }}/g" {} \;
+          API_URL="${{ secrets.API_BASE_URL }}"
+          find . -name "*.html" -type f -exec sed -i "s|__API_BASE__|${API_URL}|g" {} \;
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
