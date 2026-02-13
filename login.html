@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="api-base" content="__API_BASE__">
+    <title>Login - TeraBox API</title>
+    <!-- Fonts: Poppins for UI, Inter for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css?v=2.5">
+    <script src="dashboard.js" defer></script>
+</head>
+<body>
+    <div id="server-warning" style="display:none; background:#fff3cd; color:#856404; padding:12px; border-radius:6px; margin-bottom:12px; border:1px solid #ffeeba">
+        You're viewing template files directly (or via a static file server). Run the Flask app and open <strong>http://127.0.0.1:5000/</strong> instead so templates are rendered and styles are applied.
+    </div>
+    <script>
+        try {
+            // Show warning when not served from Flask dev server on port 5000
+            if (window.location.port && window.location.port !== '5000') {
+                document.getElementById('server-warning').style.display = 'block';
+            }
+        } catch (e) {
+            // ignore
+        }
+    </script>
+    <div class="container">
+        <div class="header">
+            <h1>TeraBox API Gateway</h1>
+            <div class="user-info">
+                <a href="index.html" class="btn btn-secondary">← Back to Status</a>
+            </div>
+        </div>
+
+        <div class="card">
+    <h2>Login to Your Account</h2>
+
+    <div class="login-info">
+        <p><strong>Login Required:</strong> Please enter your credentials to access the dashboard. Both regular users and administrators use this login page.</p>
+        <p>If you haven't received your credentials yet, please contact the administrator.</p>
+    </div>
+
+    <form id="login-form">
+        <div class="form-group">
+            <label for="username">Username or Email</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    <div class="login-help">
+        <p><strong>Need Access?</strong></p>
+        <p>Purchase a subscription plan and contact the administrator to receive your login credentials.</p>
+        <a href="index.html" class="btn btn-secondary">View Subscription Plans</a>
+    </div>
+</div>
+    </div>
+
+</body>
+</html>

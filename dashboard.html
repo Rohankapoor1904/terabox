@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="api-base" content="__API_BASE__">
+    <title>Dashboard - TeraBox API</title>
+    <!-- Fonts: Poppins for UI, Inter for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css?v=2.5">
+    <script src="dashboard.js" defer></script>
+</head>
+<body>
+    <div id="server-warning" style="display:none; background:#fff3cd; color:#856404; padding:12px; border-radius:6px; margin-bottom:12px; border:1px solid #ffeeba">
+        You're viewing template files directly (or via a static file server). Run the Flask app and open <strong>http://127.0.0.1:5000/</strong> instead so templates are rendered and styles are applied.
+    </div>
+    <script>
+        try {
+            // Show warning when not served from Flask dev server on port 5000
+            if (window.location.port && window.location.port !== '5000') {
+                document.getElementById('server-warning').style.display = 'block';
+            }
+        } catch (e) {
+            // ignore
+        }
+    </script>
+    <div class="container">
+        <div class="header">
+            <h1>TeraBox API Gateway</h1>
+            <div class="user-info">
+                <span>Welcome, <span id="user-greeting">User</span>!</span>
+                <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+                <button id="logout-btn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+
+        <div class="card">
+    <h2>Your Dashboard</h2>
+
+    <div class="grid grid-2">
+        <div class="stat-card">
+            <h3 id="monthly-used">0</h3>
+            <p>Monthly Requests Used</p>
+            <div style="background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; margin-top: 10px;">
+                <div id="monthly-progress" style="height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
+            </div>
+            <p style="margin-top: 5px; font-size: 0.9em;">Limit: <span id="monthly-limit">3000</span> | Remaining: <span id="monthly-remaining">3000</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Account Information</h2>
+
+    <div class="grid grid-2">
+        <div>
+            <h3>Profile</h3>
+            <p><strong>Username:</strong> <span id="username">-</span></p>
+            <p><strong>Email:</strong> <span id="email">-</span></p>
+            <p><strong>Admin:</strong> <span id="is-admin">-</span></p>
+        </div>
+
+        <div>
+            <h3>API Access</h3>
+            <p><strong>API Key:</strong></p>
+            <div style="background: #f7fafc; padding: 10px; border-radius: 5px; font-family: monospace; word-break: break-all;">
+                <span id="api-key">-</span>
+                <button onclick="copyToClipboard(document.getElementById('api-key').textContent)" class="btn btn-secondary" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>API Tester</h2>
+    <p>Test the TeraBox API directly from your browser.</p>
+
+    <div class="api-tester">
+        <form id="api-form" class="api-form">
+            <div class="form-group">
+                <label for="method">Method</label>
+                <select id="method" name="method">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="url">API Endpoint</label>
+                <input type="text" id="url" name="url" placeholder="/api?url=https://terabox.com/s/..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="api_key">API Key (optional - uses your session if empty)</label>
+                <input type="text" id="api_key" name="api_key" placeholder="Your API key">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Test API</button>
+        </form>
+
+        <div id="api-result" class="api-result">
+            Enter an API endpoint above and click "Test API" to see the response.
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Quick API Examples</h2>
+
+    <div class="grid grid-2">
+        <div>
+            <h3>Get File List</h3>
+            <code style="background: #f7fafc; padding: 10px; display: block; border-radius: 5px; margin: 10px 0;">
+/api?url=https://terabox.com/s/YOUR_LINK
+            </code>
+            <button onclick="document.getElementById('url').value='/api?url=https://terabox.com/s/YOUR_LINK'; document.getElementById('method').value='GET'" class="btn btn-secondary">Use This</button>
+        </div>
+
+        <div>
+            <h3>Get Direct Download Links</h3>
+            <code style="background: #f7fafc; padding: 10px; display: block; border-radius: 5px; margin: 10px 0;">
+/api2?url=https://terabox.com/s/YOUR_LINK
+            </code>
+            <button onclick="document.getElementById('url').value='/api2?url=https://terabox.com/s/YOUR_LINK'; document.getElementById('method').value='GET'" class="btn btn-secondary">Use This</button>
+        </div>
+    </div>
+</div>
+    </div>
+
+</body>
+</html>

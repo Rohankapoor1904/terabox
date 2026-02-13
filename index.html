@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="api-base" content="__API_BASE__">
+    <title>TeraBox API Gateway - Status</title>
+    <!-- Fonts: Poppins for UI, Inter for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css?v=2.5">
+    <script src="dashboard.js" defer></script>
+</head>
+<body>
+    <div id="server-warning" style="display:none; background:#fff3cd; color:#856404; padding:12px; border-radius:6px; margin-bottom:12px; border:1px solid #ffeeba">
+        You're viewing template files directly (or via a static file server). Run the Flask app and open <strong>http://127.0.0.1:5000/</strong> instead so templates are rendered and styles are applied.
+    </div>
+    <script>
+        try {
+            // Show warning when not served from Flask dev server on port 5000
+            if (window.location.port && window.location.port !== '5000') {
+                document.getElementById('server-warning').style.display = 'block';
+            }
+        } catch (e) {
+            // ignore
+        }
+    </script>
+    <div class="container">
+        <div class="header">
+            <h1>TeraBox API Gateway</h1>
+            <div class="user-info">
+                <a href="login.html" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+
+        <div class="card">
+    <h2>API Status</h2>
+    <div class="status-indicator">
+        <div class="status-item">
+            <span class="status-dot status-active"></span>
+            <span>API Server: <strong>Running</strong></span>
+        </div>
+        <div class="status-item">
+            <span class="status-dot status-active"></span>
+            <span>Database: <strong>Connected</strong></span>
+        </div>
+        <div class="status-item">
+            <span class="status-dot status-active"></span>
+            <span>Authentication: <strong>Active</strong></span>
+        </div>
+    </div>
+    <p class="status-time">Last checked: <span id="current-time">-</span></p>
+</div>
+
+<div class="card">
+    <h2>API Information</h2>
+    <div class="grid grid-2">
+        <div>
+            <h3>Version</h3>
+            <p>3.0</p>
+        </div>
+        <div>
+            <h3>Status</h3>
+            <p><span class="status-badge status-success">Operational</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Access Information</h2>
+    <div class="grid grid-2">
+        <div>
+            <div class="access-card">
+                <h3>User Access</h3>
+                <p class="muted">Subscriptions control access. Administrators provision user accounts and API keys.</p>
+
+                <ol style="margin-top:12px;">
+                    <li><strong>Purchase a subscription</strong> (contact sales or use the checkout provided by the administrator).</li>
+                    <li><strong>Receive credentials</strong> from the administrator (username, password, and API key).</li>
+                    <li><strong>Login</strong> to your dashboard and start making API requests.</li>
+                </ol>
+
+                <p style="margin-top:12px;"><strong>Quick actions</strong></p>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+                    <a href="https://t.me/the_luicifer" class="btn btn-secondary" onclick="openTelegram(event)">Contact Admin</a>
+                </div>
+
+                <div class="subscription-info" style="margin-top:18px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);">
+                    <p class="muted" style="margin:0 0 8px 0;"><strong>Plans (example)</strong></p>
+                    <ul style="margin:0;padding-left:18px;">
+                        <li><strong>Basic</strong>: 300 requests/month – 49 INR / 2 USD</li>
+                        <li><strong>Pro</strong>: 3,000 requests/month – 99 INR / 2 USD</li>
+                        <li><strong>Enterprise</strong>: 30,000 requests/month – 149 INR / 10 USD</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Administrator Actions section removed -->
+
+    </div>
+</div>
+
+<div class="card">
+    <h2>API Endpoints</h2>
+
+    <div class="endpoint-section">
+        <h3>🔐 Authentication Required</h3>
+        <p>All API endpoints require authentication. Use JWT tokens or API keys.</p>
+
+        <div class="endpoint-group">
+            <h4>Authentication Endpoints</h4>
+            <div class="endpoint">
+                <code>POST /auth/login</code>
+                <p><strong>Login to get JWT token</strong></p>
+                <div class="endpoint-details">
+                    <strong>Body:</strong> <code>{"username": "your_username", "password": "your_password"}</code><br>
+                    <strong>Response:</strong> Returns JWT token in cookie + JSON with user info<br>
+                    <strong>Example:</strong> <code>curl -X POST __API_BASE__/auth/login -H "Content-Type: application/json" -d '{"username":"user","password":"pass"}'</code>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <code>GET /auth/me</code>
+                <p><strong>Get current user info and usage stats</strong></p>
+                <div class="endpoint-details">
+                    <strong>Auth:</strong> JWT token required<br>
+                    <strong>Response:</strong> User profile + daily/monthly usage statistics<br>
+                    <strong>Example:</strong> <code>curl __API_BASE__/auth/me -H "Authorization: Bearer YOUR_JWT_TOKEN"</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint-group">
+            <h4>📁 File Access Endpoints</h4>
+
+            <div class="endpoint">
+                <code>GET /api?url=...</code>
+                <p><strong>Get file information from TeraBox links</strong></p>
+                <div class="endpoint-details">
+                    <strong>Parameters:</strong><br>
+                    • <code>url</code> (required): TeraBox share link<br>
+                    • <code>pwd</code> (optional): Password for protected links<br>
+                    <strong>Response:</strong> File list with metadata (name, size, type)<br>
+                    <strong>Example:</strong> <code>curl "__API_BASE__/api?url=https://terabox.com/s/1ABC123..." -H "Authorization: Bearer YOUR_TOKEN"</code>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <code>GET /api2?url=...</code>
+                <p><strong>Get files with direct download links</strong></p>
+                <div class="endpoint-details">
+                    <strong>Parameters:</strong><br>
+                    • <code>url</code> (required): TeraBox share link<br>
+                    • <code>pwd</code> (optional): Password for protected links<br>
+                    <strong>Response:</strong> File list with direct download URLs<br>
+                    <strong>Note:</strong> Provides actual download links (recommended for downloads)<br>
+                    <strong>Example:</strong> <code>curl "__API_BASE__/api2?url=https://terabox.com/s/1ABC123..." -H "Authorization: Bearer YOUR_TOKEN"</code>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <code>GET /api?mode=resolve&surl=...</code>
+                <p><strong>Advanced: Auto-resolve with jsToken</strong></p>
+                <div class="endpoint-details">
+                    <strong>Parameters:</strong><br>
+                    • <code>mode=resolve</code>: Auto-extract jsToken and fetch API<br>
+                    • <code>surl</code> (required): Short URL ID from share link<br>
+                    <strong>Best for:</strong> Most use cases - automatic token handling<br>
+                    <strong>Example:</strong> <code>curl "__API_BASE__/api?mode=resolve&surl=1ABC123" -H "Authorization: Bearer YOUR_TOKEN"</code>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <code>GET /api?mode=stream&surl=...</code>
+                <p><strong>Streaming: Get HLS playlist for video playback</strong></p>
+                <div class="endpoint-details">
+                    <strong>Parameters:</strong><br>
+                    • <code>mode=stream</code>: Generate streaming playlist<br>
+                    • <code>surl</code> (required): Short URL ID<br>
+                    • <code>type</code> (optional): Quality (M3U8_AUTO_360, M3U8_AUTO_480, etc.)<br>
+                    <strong>Use for:</strong> Video streaming in media players<br>
+                    <strong>Example:</strong> <code>curl "__API_BASE__/api?mode=stream&surl=1ABC123&type=M3U8_AUTO_360" -H "Authorization: Bearer YOUR_TOKEN"</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint-group">
+            <h4>📊 Public Endpoints (No Auth Required)</h4>
+
+            <div class="endpoint">
+                <code>GET /health</code>
+                <p><strong>Check API health status</strong></p>
+                <div class="endpoint-details">
+                    <strong>Response:</strong> <code>{"status": "healthy", "timestamp": "ISO_DATE"}</code><br>
+                    <strong>Example:</strong> <code>curl __API_BASE__/health</code>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <code>GET /api/public-stats</code>
+                <p><strong>View public system statistics</strong></p>
+                <div class="endpoint-details">
+                    <strong>Response:</strong> Total users, active users, requests today<br>
+                    <strong>Example:</strong> <code>curl __API_BASE__/api/public-stats</code>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <code>GET /api-info</code>
+                <p><strong>Get API information and available endpoints</strong></p>
+                <div class="endpoint-details">
+                    <strong>Response:</strong> Complete API documentation in JSON<br>
+                    <strong>Example:</strong> <code>curl __API_BASE__/api-info</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint-group">
+            <h4>⚙️ Usage & Limits</h4>
+            <div class="endpoint-details">
+                <strong>Rate Limits:</strong> Applied per user account<br>
+                <strong>Default Limits:</strong> 3,000 requests/month<br>
+                <strong>Check Usage:</strong> Use <code>GET /auth/me</code> to see current usage<br>
+                <strong>Admin Override:</strong> Admins can adjust user limits<br>
+                <strong>Error 429:</strong> Usage limit exceeded - wait or contact admin
+            </div>
+        </div>
+
+        <div class="endpoint-group">
+            <h4>🔧 Authentication Methods</h4>
+            <div class="endpoint-details">
+                <strong>Method 1 - JWT Header:</strong> <code>Authorization: Bearer YOUR_JWT_TOKEN</code><br>
+                <strong>Method 2 - API Key Header:</strong> <code>X-API-Key: YOUR_API_KEY</code><br>
+                <strong>Method 3 - Query Parameter:</strong> <code>?api_key=YOUR_API_KEY</code><br>
+                <strong>Get API Key:</strong> Login and check your dashboard or use <code>/auth/me</code>
+            </div>
+        </div>
+
+        <div class="endpoint-group">
+            <h4>🚨 Error Codes</h4>
+            <div class="endpoint-details">
+                <strong>200:</strong> Success<br>
+                <strong>400:</strong> Bad request (invalid parameters)<br>
+                <strong>401:</strong> Authentication required/not valid<br>
+                <strong>403:</strong> Admin access required<br>
+                <strong>429:</strong> Usage limit exceeded<br>
+                <strong>500:</strong> Server error
+            </div>
+        </div>
+    </div>
+
+    <div class="endpoint-note">
+        <p><strong>📝 Important Notes:</strong></p>
+        <ul>
+            <li>All file access endpoints require authentication</li>
+            <li>Contact administrator after subscription to receive login credentials</li>
+            <li>Use <code>/api2</code> for downloads, <code>/api</code> for file information</li>
+            <li>Advanced modes (<code>mode=resolve</code>, <code>mode=stream</code>) provide better performance</li>
+            <li>Check your usage limits with <code>GET /auth/me</code></li>
+            <li>Protected links require <code>pwd</code> parameter</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h2>System Statistics</h2>
+    <div class="grid grid-3">
+        <div class="stat-card">
+            <h3 id="total-users">-</h3>
+            <p>Registered Users</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="active-users">-</h3>
+            <p>Active Today</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="total-requests">-</h3>
+            <p>Requests Today</p>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update current time
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('current-time').textContent = now.toLocaleString();
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Load public statistics
+    loadPublicStats();
+});
+
+async function loadPublicStats() {
+    try {
+        const response = await fetch(API_BASE + '/api/public-stats');
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('total-users').textContent = data.total_users;
+            document.getElementById('active-users').textContent = data.active_users_today;
+            document.getElementById('total-requests').textContent = data.requests_today;
+        }
+    } catch (error) {
+        console.error('Failed to load stats:', error);
+    }
+}
+
+// Open Telegram app or web fallback
+function openTelegram(event) {
+    event.preventDefault();
+    
+    // Try to open Telegram app
+    const appUrl = 'tg://resolve?domain=the_luicifer';
+    const webUrl = 'https://t.me/the_luicifer';
+    
+    // Create a hidden iframe to try opening the app
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = appUrl;
+    document.body.appendChild(iframe);
+    
+    // Fallback to web after a short delay
+    setTimeout(() => {
+        document.body.removeChild(iframe);
+        window.open(webUrl, '_blank');
+    }, 1000);
+}
+</script>
+</body>
+</html>
