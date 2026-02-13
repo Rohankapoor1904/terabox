@@ -27,9 +27,15 @@ jobs:
           node-version: '18'
 
       - name: Replace API Base URL
+        env:
+          API_URL: ${{ secrets.API_BASE_URL }}
         run: |
-          API_URL="${{ secrets.API_BASE_URL }}"
-          find . -name "*.html" -type f -exec sed -i "s|__API_BASE__|${API_URL}|g" {} \;
+          if [ -z "$API_URL" ]; then
+            echo "API_BASE_URL secret not found!"
+            exit 1
+          fi
+          echo "Replacing __API_BASE__ with API URL..."
+          sed -i "s|__API_BASE__|$API_URL|g" *.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
