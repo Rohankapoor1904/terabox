@@ -30,6 +30,7 @@
             <div class="user-info">
                 <span>Welcome, <span id="user-greeting">User</span>!</span>
                 <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+                <a id="admin-btn" href="#admin-section" class="btn btn-secondary" style="display:none;">Admin Panel</a>
                 <button id="logout-btn" class="btn btn-secondary">Logout</button>
             </div>
         </div>
@@ -67,6 +68,69 @@
                 <span id="api-key">-</span>
                 <button onclick="copyToClipboard(document.getElementById('api-key').textContent)" class="btn btn-secondary" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">Copy</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="admin-section" style="display:none;">
+    <h2>Admin Panel</h2>
+    <p>Manage users and view usage statistics.</p>
+
+    <div class="grid grid-3" style="margin-top:16px;">
+        <div class="stat-card">
+            <h3 id="admin-total-users">-</h3>
+            <p>Total Users</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="admin-active-users">-</h3>
+            <p>Active Users</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="admin-admin-users">-</h3>
+            <p>Admin Users</p>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+        <h3>Create User</h3>
+        <form id="admin-create-user-form" class="api-form">
+            <div class="form-group">
+                <label for="new-username">Username</label>
+                <input type="text" id="new-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="new-email">Email</label>
+                <input type="email" id="new-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="new-password">Password</label>
+                <input type="password" id="new-password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+        <h3>User Management</h3>
+        <div style="overflow-x:auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Daily Limit</th>
+                        <th>Monthly Limit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <tr>
+                        <td colspan="7" style="text-align:center;">Loading users...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
