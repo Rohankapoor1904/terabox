@@ -1,37 +1,23 @@
-# TeraBox Gateway Frontend
+# TeraBox API Gateway
 
-A static frontend for the TeraBox Gateway API, hosted on GitHub Pages.
+Visit the status site and full usage guide here:
 
-## Features
+https://rohankapoor1904.github.io/terabox/
 
-- User login and dashboard
-- API testing interface
-- Usage statistics
-- Admin panel access
+## What this project is
 
-## Setup
+TeraBox API Gateway powers the backend for authentication, usage tracking, and TeraBox link resolution. All public usage instructions, endpoints, and examples are maintained on the website above.
 
-1. Clone or download this repository
-2. The frontend connects to the API using a configurable base URL
-3. Host on GitHub Pages by pushing to a GitHub repository and enabling Pages in settings
+## For users
 
-## GitHub Secrets Setup
+- Open the status website to check uptime and read the full API guide.
+- Use the login flow and API key instructions on the website to get access.
 
-To keep sensitive values out of the repository, add the following secret in your GitHub repository settings:
+## For admins
 
-### Repository Secrets (Settings → Secrets and variables → Actions)
-- `API_BASE_URL`: Your TeraBox API base URL (e.g., `https://your-api-domain.com`)
+- Admin access is controlled server-side.
+- If you need admin credentials or user provisioning, use the contact details on the website.
 
-The GitHub Actions workflow will automatically replace `__API_BASE__` placeholders with the secret value during deployment.
+## Support
 
-## API Connection
-
-The frontend connects to the deployed TeraBox Gateway API server. Authentication is handled via JWT tokens stored in localStorage.
-
-## Files
-
-- `index.html` - Main status page
-- `login.html` - Login page
-- `dashboard.html` - User dashboard
-- `style.css` - Stylesheet
-- `dashboard.js` - JavaScript for API interactions
+If you encounter issues, check the status page first, then follow the guidance on the website.
