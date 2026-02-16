@@ -129,7 +129,6 @@ function updateAdminDashboard(data) {
                 <td>${user.email}</td>
                 <td>${user.is_active ? 'Active' : 'Inactive'}</td>
                 <td>${user.is_admin ? 'Admin' : 'User'}</td>
-                <td>${user.max_requests_per_day}</td>
                 <td>${user.max_requests_per_month}</td>
                 <td>
                     <button class="btn btn-secondary" onclick="editUser(${user.id})">Edit</button>
@@ -371,7 +370,7 @@ function handleLogout() {
 
 // Edit user (admin)
 function editUser(userId) {
-    const newLimit = prompt('Enter new daily request limit:');
+    const newLimit = prompt('Enter new monthly request limit:');
     if (newLimit && !isNaN(newLimit)) {
         updateUserLimit(userId, parseInt(newLimit));
     }
@@ -387,7 +386,7 @@ async function updateUserLimit(userId, newLimit) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                max_requests_per_day: newLimit
+                max_requests_per_month: newLimit
             })
         });
 
