@@ -87,6 +87,10 @@ function updateDashboard(data) {
     document.getElementById('email').textContent = user.email;
     document.getElementById('api-key').textContent = user.api_key;
     document.getElementById('is-admin').textContent = user.is_admin ? 'Yes' : 'No';
+    const greeting = document.getElementById('user-greeting');
+    if (greeting) {
+        greeting.textContent = user.username;
+    }
 
     // Update usage stats
     document.getElementById('monthly-used').textContent = usage.monthly.used;
@@ -95,6 +99,17 @@ function updateDashboard(data) {
 
     // Update progress bar
     updateProgressBar('monthly-progress', usage.monthly.used, usage.monthly.limit);
+
+    const adminSection = document.getElementById('admin-section');
+    const adminBtn = document.getElementById('admin-btn');
+    if (user.is_admin) {
+        if (adminSection) adminSection.style.display = 'block';
+        if (adminBtn) adminBtn.style.display = 'inline-flex';
+        loadAdminDashboard();
+    } else {
+        if (adminSection) adminSection.style.display = 'none';
+        if (adminBtn) adminBtn.style.display = 'none';
+    }
 }
 
 // Update admin dashboard
@@ -102,24 +117,40 @@ function updateAdminDashboard(data) {
     const users = data.users;
     const tbody = document.getElementById('users-table-body');
 
-    tbody.innerHTML = '';
+    if (tbody) {
+        tbody.innerHTML = '';
+    }
 
-    users.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${user.username}</td>
-            <td>${user.email}</td>
-            <td>${user.is_active ? 'Active' : 'Inactive'}</td>
-            <td>${user.is_admin ? 'Admin' : 'User'}</td>
-            <td>${user.max_requests_per_day}</td>
-            <td>${user.max_requests_per_month}</td>
-            <td>
-                <button class="btn btn-secondary" onclick="editUser(${user.id})">Edit</button>
-                <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
+    if (Array.isArray(users) && tbody) {
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.is_active ? 'Active' : 'Inactive'}</td>
+                <td>${user.is_admin ? 'Admin' : 'User'}</td>
+                <td>${user.max_requests_per_day}</td>
+                <td>${user.max_requests_per_month}</td>
+                <td>
+                    <button class="btn btn-secondary" onclick="editUser(${user.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    const totalUsersEl = document.getElementById('admin-total-users');
+    const activeUsersEl = document.getElementById('admin-active-users');
+    const adminUsersEl = document.getElementById('admin-admin-users');
+    const totalUsers = data.pagination && typeof data.pagination.total === 'number'
+        ? data.pagination.total
+        : (Array.isArray(users) ? users.length : 0);
+    const activeUsers = Array.isArray(users) ? users.filter(u => u.is_active).length : 0;
+    const adminUsers = Array.isArray(users) ? users.filter(u => u.is_admin).length : 0;
+    if (totalUsersEl) totalUsersEl.textContent = totalUsers;
+    if (activeUsersEl) activeUsersEl.textContent = activeUsers;
+    if (adminUsersEl) adminUsersEl.textContent = adminUsers;
 }
 
 // Update progress bar
@@ -208,6 +239,11 @@ function setupFormHandlers() {
         registerForm.addEventListener('submit', handleRegister);
     }
 
+    const adminCreateUserForm = document.getElementById('admin-create-user-form');
+    if (adminCreateUserForm) {
+        adminCreateUserForm.addEventListener('submit', handleAdminCreateUser);
+    }
+
     // Logout
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
@@ -286,6 +322,43 @@ async function handleRegister(e) {
         }
     } catch (error) {
         showAlert('Registration failed', 'error');
+    }
+}
+
+async function handleAdminCreateUser(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const username = (formData.get('username') || '').toString().trim();
+    const email = (formData.get('email') || '').toString().trim();
+    const password = (formData.get('password') || '').toString();
+
+    if (!username || !email || !password) {
+        showAlert('Username, email, and password are required', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getAuthHeaders()
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json().catch(() => null);
+        if (response.ok) {
+            showAlert('User created successfully', 'success');
+            e.target.reset();
+            loadAdminDashboard();
+        } else {
+            const message = data && (data.error || data.message) ? (data.error || data.message) : 'Failed to create user';
+            showAlert(message, 'error');
+        }
+    } catch (error) {
+        showAlert('Failed to create user', 'error');
     }
 }
 
