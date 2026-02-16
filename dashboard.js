@@ -359,7 +359,8 @@ function getAuthHeaders() {
 
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
-    } else if (apiKey) {
+    }
+    if (apiKey) {
         headers['X-API-Key'] = apiKey;
     }
 
