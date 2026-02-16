@@ -115,7 +115,7 @@
                 <div class="endpoint-details">
                     <strong>Body:</strong> <code>{"username": "your_username", "password": "your_password"}</code><br>
                     <strong>Response:</strong> Returns JWT token in cookie + JSON with user info<br>
-                    <strong>Example:</strong> <code>curl -X POST __API_BASE__/auth/login -H "Content-Type: application/json" -d '{"username":"user","password":"pass"}'</code>
+                    <strong>Example:</strong> <code>curl -X POST https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/auth/login -H "Content-Type: application/json" -d '{"username":"user","password":"pass"}'</code>
                 </div>
             </div>
 
@@ -125,7 +125,7 @@
                 <div class="endpoint-details">
                     <strong>Auth:</strong> JWT token required<br>
                     <strong>Response:</strong> User profile + daily/monthly usage statistics<br>
-                    <strong>Example:</strong> <code>curl __API_BASE__/auth/me -H "Authorization: Bearer YOUR_JWT_TOKEN"</code>
+                    <strong>Example:</strong> <code>curl https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/auth/me -H "Authorization: Bearer YOUR_JWT_TOKEN"</code>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
                     • <code>url</code> (required): TeraBox share link<br>
                     • <code>pwd</code> (optional): Password for protected links<br>
                     <strong>Response:</strong> File list with metadata (name, size, type)<br>
-                    <strong>Example:</strong> <code>curl "__API_BASE__/api?url=https://terabox.com/s/1ABC123..." -H "Authorization: Bearer YOUR_TOKEN"</code>
+                    <strong>Example:</strong> <code>curl "https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/api?url=https://terabox.com/s/1ABC123..." -H "Authorization: Bearer YOUR_TOKEN"</code>
                 </div>
             </div>
 
@@ -154,7 +154,7 @@
                     • <code>pwd</code> (optional): Password for protected links<br>
                     <strong>Response:</strong> File list with direct download URLs<br>
                     <strong>Note:</strong> Provides actual download links (recommended for downloads)<br>
-                    <strong>Example:</strong> <code>curl "__API_BASE__/api2?url=https://terabox.com/s/1ABC123..." -H "Authorization: Bearer YOUR_TOKEN"</code>
+                    <strong>Example:</strong> <code>curl "https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/api2?url=https://terabox.com/s/1ABC123..." -H "Authorization: Bearer YOUR_TOKEN"</code>
                 </div>
             </div>
 
@@ -166,7 +166,7 @@
                     • <code>mode=resolve</code>: Auto-extract jsToken and fetch API<br>
                     • <code>surl</code> (required): Short URL ID from share link<br>
                     <strong>Best for:</strong> Most use cases - automatic token handling<br>
-                    <strong>Example:</strong> <code>curl "__API_BASE__/api?mode=resolve&surl=1ABC123" -H "Authorization: Bearer YOUR_TOKEN"</code>
+                    <strong>Example:</strong> <code>curl "https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/api?mode=resolve&surl=1ABC123" -H "Authorization: Bearer YOUR_TOKEN"</code>
                 </div>
             </div>
 
@@ -179,7 +179,7 @@
                     • <code>surl</code> (required): Short URL ID<br>
                     • <code>type</code> (optional): Quality (M3U8_AUTO_360, M3U8_AUTO_480, etc.)<br>
                     <strong>Use for:</strong> Video streaming in media players<br>
-                    <strong>Example:</strong> <code>curl "__API_BASE__/api?mode=stream&surl=1ABC123&type=M3U8_AUTO_360" -H "Authorization: Bearer YOUR_TOKEN"</code>
+                    <strong>Example:</strong> <code>curl "https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/api?mode=stream&surl=1ABC123&type=M3U8_AUTO_360" -H "Authorization: Bearer YOUR_TOKEN"</code>
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@
                 <p><strong>Check API health status</strong></p>
                 <div class="endpoint-details">
                     <strong>Response:</strong> <code>{"status": "healthy", "timestamp": "ISO_DATE"}</code><br>
-                    <strong>Example:</strong> <code>curl __API_BASE__/health</code>
+                    <strong>Example:</strong> <code>curl https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/health</code>
                 </div>
             </div>
 
@@ -201,7 +201,7 @@
                 <p><strong>View public system statistics</strong></p>
                 <div class="endpoint-details">
                     <strong>Response:</strong> Total users, active users, requests today<br>
-                    <strong>Example:</strong> <code>curl __API_BASE__/api/public-stats</code>
+                    <strong>Example:</strong> <code>curl https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/api/public-stats</code>
                 </div>
             </div>
 
@@ -210,7 +210,7 @@
                 <p><strong>Get API information and available endpoints</strong></p>
                 <div class="endpoint-details">
                     <strong>Response:</strong> Complete API documentation in JSON<br>
-                    <strong>Example:</strong> <code>curl __API_BASE__/api-info</code>
+                    <strong>Example:</strong> <code>curl https://6ab25a82-ff2e-46c2-87f7-527275574e3a.glacierhosting.org/api-info</code>
                 </div>
             </div>
         </div>
@@ -282,6 +282,12 @@
     </div>
 
     <script>
+// Get API base from meta tag for all scripts
+var API_BASE = (function() {
+    var meta = document.querySelector('meta[name="api-base"]');
+    return meta ? meta.getAttribute('content') : window.location.origin;
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
     // Update current time
     function updateTime() {
