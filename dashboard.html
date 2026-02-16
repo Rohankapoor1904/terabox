@@ -42,10 +42,10 @@
         <div class="stat-card">
             <h3 id="monthly-used">0</h3>
             <p>Monthly Requests Used</p>
-            <div style="background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; margin-top: 10px;">
-                <div id="monthly-progress" style="height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
+            <div class="progress-track">
+                <div id="monthly-progress" class="progress-bar"></div>
             </div>
-            <p style="margin-top: 5px; font-size: 0.9em;">Limit: <span id="monthly-limit">3000</span> | Remaining: <span id="monthly-remaining">3000</span></p>
+            <p class="progress-meta">Limit: <span id="monthly-limit">3000</span> | Remaining: <span id="monthly-remaining">3000</span></p>
         </div>
     </div>
 </div>
@@ -64,9 +64,9 @@
         <div>
             <h3>API Access</h3>
             <p><strong>API Key:</strong></p>
-            <div style="background: #f7fafc; padding: 10px; border-radius: 5px; font-family: monospace; word-break: break-all;">
+            <div class="credentials-box">
                 <span id="api-key">-</span>
-                <button onclick="copyToClipboard(document.getElementById('api-key').textContent)" class="btn btn-secondary" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">Copy</button>
+                <button onclick="copyToClipboard(document.getElementById('api-key').textContent)" class="btn btn-secondary btn-small">Copy</button>
             </div>
         </div>
     </div>
@@ -173,7 +173,7 @@
     <div class="grid grid-2">
         <div>
             <h3>Get File List</h3>
-            <code style="background: #f7fafc; padding: 10px; display: block; border-radius: 5px; margin: 10px 0;">
+            <code class="code-snippet">
 /api?url=https://terabox.com/s/YOUR_LINK
             </code>
             <button onclick="document.getElementById('url').value='/api?url=https://terabox.com/s/YOUR_LINK'; document.getElementById('method').value='GET'" class="btn btn-secondary">Use This</button>
@@ -181,7 +181,7 @@
 
         <div>
             <h3>Get Direct Download Links</h3>
-            <code style="background: #f7fafc; padding: 10px; display: block; border-radius: 5px; margin: 10px 0;">
+            <code class="code-snippet">
 /api2?url=https://terabox.com/s/YOUR_LINK
             </code>
             <button onclick="document.getElementById('url').value='/api2?url=https://terabox.com/s/YOUR_LINK'; document.getElementById('method').value='GET'" class="btn btn-secondary">Use This</button>
