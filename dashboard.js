@@ -3,11 +3,24 @@
 // API Base URL - will be set by the template
 let API_BASE = '';
 
+function resolveApiBase() {
+    const metaApiBase = document.querySelector('meta[name="api-base"]');
+    const metaValue = metaApiBase ? metaApiBase.getAttribute('content') : '';
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('api_base') || params.get('apiBase');
+    const storedValue = localStorage.getItem('api_base');
+
+    if (paramValue && paramValue.trim()) {
+        localStorage.setItem('api_base', paramValue.trim());
+    }
+
+    const candidate = [paramValue, storedValue, metaValue].find(value => value && value.trim() && value !== '__API_BASE__');
+    API_BASE = candidate ? candidate.trim().replace(/\/$/, '') : window.location.origin;
+}
+
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Get API base from meta tag or default to current origin
-    const metaApiBase = document.querySelector('meta[name="api-base"]');
-    API_BASE = metaApiBase ? metaApiBase.getAttribute('content') : window.location.origin;
+    resolveApiBase();
 
     // Initialize dashboard based on current page
     const path = window.location.pathname;
@@ -36,7 +49,7 @@ async function loadDashboard() {
             const data = await response.json();
             updateDashboard(data);
         } else {
-            window.location.href = '/login';
+            window.location.href = 'login.html';
         }
     } catch (error) {
         console.error('Failed to load dashboard:', error);
@@ -55,7 +68,7 @@ async function loadAdminDashboard() {
             const data = await response.json();
             updateAdminDashboard(data);
         } else {
-            window.location.href = '/login';
+            window.location.href = 'login.html';
         }
     } catch (error) {
         console.error('Failed to load admin dashboard:', error);
@@ -183,6 +196,11 @@ function setupApiTester() {
 
 // Setup form handlers
 function setupFormHandlers() {
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+
     // Register form
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
@@ -193,6 +211,45 @@ function setupFormHandlers() {
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', handleLogout);
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const username = (formData.get('username') || '').toString().trim();
+    const password = (formData.get('password') || '').toString();
+
+    if (!username || !password) {
+        showAlert('Username and password are required', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (response.ok && data && data.access_token) {
+            localStorage.setItem('jwt_token', data.access_token);
+            if (data.user && data.user.api_key) {
+                localStorage.setItem('api_key', data.user.api_key);
+            }
+            window.location.href = 'dashboard.html';
+            return;
+        }
+
+        const message = data && (data.error || data.message) ? (data.error || data.message) : 'Login failed';
+        showAlert(message, 'error');
+    } catch (error) {
+        showAlert('Login failed', 'error');
     }
 }
 
@@ -235,7 +292,7 @@ async function handleRegister(e) {
 function handleLogout() {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('api_key');
-    window.location.href = '/login';
+    window.location.href = 'login.html';
 }
 
 // Edit user (admin)
