@@ -1,7 +1,7 @@
 // TeraBox API Dashboard JavaScript
 
 // API Base URL - will be set by the template
-let API_BASE = '';
+var API_BASE = window.API_BASE || '';
 
 function resolveApiBase() {
     const metaApiBase = document.querySelector('meta[name="api-base"]');
@@ -16,6 +16,7 @@ function resolveApiBase() {
 
     const candidate = [paramValue, storedValue, metaValue].find(value => value && value.trim() && value !== '__API_BASE__');
     API_BASE = candidate ? candidate.trim().replace(/\/$/, '') : window.location.origin;
+    window.API_BASE = API_BASE;
 }
 
 // DOM Content Loaded
